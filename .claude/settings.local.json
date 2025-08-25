@@ -1,0 +1,28 @@
+{
+   "permissions": {
+      "allow": [
+         "Bash(awk:*)",
+         "Bash(sed:*)",
+         "Bash(grep:*)",
+         "Bash(echo:*)",
+         "Bash(cat:*)",
+         "Bash(pwd:*)",
+         "Bash(cd:*)",
+         "Bash(ls:*)",
+         "Bash(source:*)",
+         "Bash(find:*)",
+         "Bash(locate:*)",
+         "Bash(tree:*)",
+         "Bash(mv:*)",
+         "Bash(cp:*)",
+         "Bash(mkdir:*)",
+         "Bash(ruff check:*)",
+         "Bash(./gradlew:*)",
+         "Bash(gh issue view:*)",
+         "WebFetch(domain:docs.anthropic.com*)",
+         "WebFetch(domain:github.com*)",
+         "mcp__serena"
+      ],
+      "deny": []
+   }
+}

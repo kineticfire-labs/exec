@@ -1,0 +1,267 @@
+/*
+ * (c) Copyright 2023-2025 'exec' Contributors. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * KineticFire Labs: https://labs.kineticfire.com/
+ *     project site:  https://github.com/kineticfire-labs/exec/
+ *
+ */
+
+
+ import org.cyclonedx.model.OrganizationalContact
+ import org.cyclonedx.model.License
+ import org.cyclonedx.model.AttachmentText
+
+plugins {
+    // Apply the groovy plugin to also add support for Groovy (needed for Spock)
+    id 'groovy'
+    // Apply the java-library plugin for API and implementation separation.
+    id 'java-library'
+    id 'com.github.hierynomus.license' version "${hierynomus_version}"
+    id 'org.cyclonedx.bom' version "${cyloneDX_version}"
+}
+
+// properties that define versions that either must be set or default to a value of 'latest'; set on command line with
+// -Pproperty=value
+def requiredVersionPropertyList = ['project_release', 'javaUtil_lib_version']
+
+// throw exception, stopping build, if property doesn't satisfy version format
+checkRequiredVersionPropertyList( requiredVersionPropertyList )
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral( )
+}
+
+dependencies {
+
+    // Use the latest Groovy version for Spock testing
+    testImplementation "org.apache.groovy:groovy:${groovy_version}"
+
+    // Use the awesome Spock testing and specification framework even with Java
+    testImplementation "org.spockframework:spock-core:${spockCore_version}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_version}"
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // This dependency is exported to consumers, that is to say found on their compile classpath.
+    api "org.apache.commons:commons-math3:${apacheCommonsMath3_version}"
+
+}
+
+// Apply a specific Java toolchain to ease working on different environments.
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of( getProperty( 'javaLanguage_version' ) )
+    }
+}
+
+tasks.named( 'test' ) {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform( )
+}
+
+javadoc {
+    options.bottom = "Copyright (c) ${project_copyrightYears} KineticFire.  All rights reserved."
+}
+
+def commonJarManifestMap = [
+        'Implementation-Vendor'  : 'KineticFire Labs',
+        'Implementation-Project' : "${project_title}",
+        'Implementation-Release' : "${project_release}",
+        'Implementation-Title'   : "${javaUtil_lib_title}",
+        'Implementation-Version' : "${javaUtil_lib_version}",
+        'Implementation-URL'     : 'https://github.com/kineticfire-labs/exec/'
+    ]
+
+def classesJarManifestMap = [:]
+classesJarManifestMap.putAll( commonJarManifestMap )
+classesJarManifestMap.put( 'Name', 'com/kineticfire/util/' )
+classesJarManifestMap.put( 'Sealed', 'true' )
+
+jar {
+    archiveBaseName = "${javaUtil_lib_name}"
+    archiveVersion = "${javaUtil_lib_version}"
+
+    manifest {
+        attributes(
+            classesJarManifestMap
+        )
+    }
+
+    from( rootProject.projectDir ) {
+        include 'LICENSE/'
+    }
+}
+
+task javadocJar( type: Jar ) {
+
+    archiveClassifier = 'javadoc'
+    from javadoc
+
+    archiveBaseName = "${javaUtil_lib_name}"
+    archiveVersion = "${javaUtil_lib_version}"
+
+    manifest {
+        attributes(
+            commonJarManifestMap
+        )
+    }
+
+    from( rootProject.projectDir ) {
+        include 'LICENSE/'
+    }
+}
+
+task sourcesJar( type: Jar ) {
+
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+
+    archiveBaseName = "${javaUtil_lib_name}"
+    archiveVersion = "${javaUtil_lib_version}"
+
+    manifest {
+        attributes(
+            commonJarManifestMap
+        )
+    }
+
+    from( rootProject.projectDir ) {
+        include 'LICENSE/'
+    }
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+license {
+    header rootProject.file( 'resources' + File.separator + 'LICENSE_HEADER' )
+    excludes( ["**/generated/**/*.java"] )
+    mapping( 'java', 'SLASHSTAR_STYLE' )
+}
+
+cyclonedxBom {
+
+    OrganizationalContact organizationalContact = new OrganizationalContact()
+    organizationalContact.setEmail( 'hello@kineticfire.com' )
+
+    organizationalEntity {oe->
+        oe.name = 'KineticFire Labs'
+        oe.url = ['https://labs.kineticfire.com/', 'https://github.com/kineticfire-labs/exec/']
+        oe.addContact( organizationalContact )
+    }
+
+    projectType = 'library'
+
+    outputName = "${javaUtil_lib_name}-${javaUtil_lib_version}-cyclonedx"
+
+    includeConfigs = ['implementation']
+    skipConfigs = ['testImplementation', 'testRuntimeOnly', 'api']
+
+    AttachmentText attachmentText = new AttachmentText( )
+    attachmentText.setText( "Copyright (c) ${project_copyrightYears} KineticFire. All rights reserved.  Licensed under the Apache License, Version 2.0.  See included 'LICENSE' file or license URL." )
+
+    License license = new License( )
+    license.setLicenseText( attachmentText );
+    license.setId( 'Apache-2.0' )
+    license.setUrl( 'https://www.apache.org/licenses/LICENSE-2.0' )
+    licenseChoice {lc->
+        lc.addLicense( license )
+    }
+}
+
+build.finalizedBy( 'cyclonedxBom' )
+
+tasks.register( 'readme' ) {
+    group 'Help'
+    description 'Displays an overview of the project and directions for building and releasing the project.'
+    doLast {
+
+        println """
+--------------------------------------------------------------------
+readme
+--------------------------------------------------------------------
+
+--------------------------------------------------------------------
+Overview
+
+    Purpose:  Build and publish to Central Repository the 'exec' project artifacts.
+
+    Artifacts Produced
+        - exec-<version>.jar
+        - exec-<version>-javadoc.jar
+        - exec-<version>-sources.jar
+
+--------------------------------------------------------------------
+Building & Releasing
+
+    --------------------------------------------------------------------
+    Development
+
+        - Test; build classes, sources, and javadocs JARs; produce CycloneDX SBOMs
+            => ./gradlew -Pproject_release=<version> -PjavaUtil_lib_version=<version> clean build
+
+    --------------------------------------------------------------------
+    Release
+        - tbd
+"""
+
+    }
+
+}
+
+/**
+ * Checks that required properties' values adhere to the required format, throwing an error if not.  If not set, then
+ * sets the property value to 'latest'.
+ * <p>
+ * A valid format is 'latest' or:
+ * <ul>
+ *    <li>takes the form &lt;number&gt;.&lt;number&gt;.&lt;number&gt; where the series of three numbers separated by
+ *    dots would typically represent &lt;major&gt;.&lt;minor&gt;.&lt;fix&gt;</li>
+ *    <li>each 'number' is a non-negative integer consisting of one or more digits 0-9 such that a number cannot have a
+ *    leading '0' (but a 'number' can be exactly '0')</li>
+ * </ul>
+ *
+ * @param propertyList
+ *    a list of String properties to check
+ */
+void checkRequiredVersionPropertyList( propertyList ) {
+
+    for ( String property : propertyList ) {
+
+        if ( project.hasProperty( property ) ) {
+
+            String value = project[property]
+
+            if ( ( value ==~ /(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)/ ) || value ==~ /latest/ ) {
+                println "Property defined, setting:  $property=$value"
+            } else {
+                throw new GradleException( "Value for property $property did match required format." )
+            }
+
+        } else {
+            String value = 'latest'
+            ext[property]=value
+            println "Property not defined, setting to default:  $property=$value"
+        }
+
+    }
+
+}
+
+
