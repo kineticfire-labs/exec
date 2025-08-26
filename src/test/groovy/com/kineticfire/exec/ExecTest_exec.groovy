@@ -107,7 +107,7 @@ class ExecTest_exec extends Specification {
         List<String> task = Arrays.asList( '' )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task )
+        Exec.exec( task )
 
         then: "thrown exception"
         thrown IOException
@@ -119,7 +119,7 @@ class ExecTest_exec extends Specification {
         List<String> task = Arrays.asList( 'ls', null )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task )
+        Exec.exec( task )
 
         then: "thrown exception"
         thrown NullPointerException
@@ -198,7 +198,7 @@ class ExecTest_exec extends Specification {
         List<String> task = Arrays.asList( '' )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, null )
+        Exec.exec( task, null )
 
         then: "thrown exception"
         thrown IOException
@@ -210,7 +210,7 @@ class ExecTest_exec extends Specification {
         List<String> task = Arrays.asList( 'ls', null )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, null )
+        Exec.exec( task, null )
 
         then: "thrown exception"
         thrown NullPointerException
@@ -300,7 +300,7 @@ class ExecTest_exec extends Specification {
         cfg.put( 'trim', 'illegal-value' )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, cfg )
+        Exec.exec( task, cfg )
 
         then: "thrown exception"
         thrown IllegalArgumentException
@@ -433,7 +433,7 @@ class ExecTest_exec extends Specification {
         cfg.put( 'redirectErrToOut', 'illegal-value' )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, cfg )
+        Exec.exec( task, cfg )
 
         then: "exception thrown"
         thrown IllegalArgumentException
@@ -565,7 +565,7 @@ class ExecTest_exec extends Specification {
         cfg.put( 'redirectOutFilePath', outFilePath )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, cfg )
+        Exec.exec( task, cfg )
 
         then: "exception thrown"
         thrown IllegalArgumentException
@@ -580,7 +580,7 @@ class ExecTest_exec extends Specification {
         cfg.put( 'redirectOutFilePath', outFilePath )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, cfg )
+        Exec.exec( task, cfg )
 
         then: "exception thrown"
         thrown IllegalArgumentException
@@ -596,7 +596,7 @@ class ExecTest_exec extends Specification {
         cfg.put( 'redirectOutType', 'illegal-value' )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, cfg )
+        Exec.exec( task, cfg )
 
         then: "exception thrown"
         thrown IllegalArgumentException
@@ -966,7 +966,7 @@ class ExecTest_exec extends Specification {
         List<String> task = Arrays.asList( '' )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, null, null, null )
+        Exec.exec( task, null, null, null )
 
         then: "thrown exception"
         thrown IOException
@@ -978,7 +978,7 @@ class ExecTest_exec extends Specification {
         List<String> task = Arrays.asList( 'ls', null )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, null, null, null )
+        Exec.exec( task, null, null, null )
 
         then: "thrown exception"
         thrown NullPointerException
@@ -1068,7 +1068,7 @@ class ExecTest_exec extends Specification {
         cfg.put( 'trim', 'illegal-value' )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, cfg, null, null )
+        Exec.exec( task, cfg, null, null )
 
         then: "thrown exception"
         thrown IllegalArgumentException
@@ -1333,7 +1333,7 @@ class ExecTest_exec extends Specification {
         cfg.put( 'redirectOutFilePath', outFilePath )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, cfg, null, null )
+        Exec.exec( task, cfg, null, null )
 
         then: "exception thrown"
         thrown IllegalArgumentException
@@ -1554,7 +1554,7 @@ class ExecTest_exec extends Specification {
         cfg.put( 'redirectErrFilePath', errFilePath )
 
         when: "execute the command"
-        Map<String,String> resultMap = Exec.exec( task, cfg, null, null )
+        Exec.exec( task, cfg, null, null )
 
         then: "exception thrown"
         thrown IllegalArgumentException
