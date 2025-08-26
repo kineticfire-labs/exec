@@ -54,11 +54,11 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
         List<String> task = Arrays.asList( 'whoami' )
 
         when: "execute the command"
-        String result = Exec.execExceptionOnTaskFail( task );
+        String result = Exec.execExceptionOnTaskFail( task )
 
         then: "result contains correct username"
         String usernameExpected = System.properties[ 'user.name' ]
-        result == usernameExpected;
+        result == usernameExpected
     }
 
     def "execExceptionOnTaskFail(List<String> task) for valid task with one CL argument returns correct result"( ) {
