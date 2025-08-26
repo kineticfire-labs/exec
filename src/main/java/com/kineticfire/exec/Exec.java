@@ -300,7 +300,7 @@ public final class Exec {
    public static Map<String,String> exec( List<String> task, Map<String,String> config, Map<String,String> addEnv,
                                           List<String> removeEnv ) throws IOException {
 
-      Map<String,String> resultMap = new HashMap<String,String>( );
+      Map<String,String> resultMap = new HashMap<>( );
 
       // define flags
       boolean outToFile = false;   // 'true' if standard output is redirected to a file and false otherwise
@@ -447,8 +447,8 @@ public final class Exec {
 
       Process proc = processBuilder.start( );
 
-      StringBuffer outSb = new StringBuffer( );
-      StringBuffer errSb = new StringBuffer( );
+      StringBuilder outSb = new StringBuilder( );
+      StringBuilder errSb = new StringBuilder( );
 
       waitForProcessOutput( proc, outSb, errSb );
 
@@ -757,8 +757,8 @@ public final class Exec {
          }
 
 
-         StringBuffer messageSb = new StringBuffer( );
-         StringBuffer taskSb = new StringBuffer( );
+         StringBuilder messageSb = new StringBuilder( );
+         StringBuilder taskSb = new StringBuilder( );
 
          taskSb.append( "[" );
 
@@ -772,7 +772,7 @@ public final class Exec {
          taskSb.append( "]" );
 
 
-         messageSb.append( "Executing task '" + taskSb.toString( ) + "' failed with exit value '" + exitValue + "." );
+         messageSb.append( "Executing task '" + taskSb + "' failed with exit value '" + exitValue + "." );
 
          // key 'err' always defined in this case, since error cannot be redirected output or a file; 'err' may be empty
          // String

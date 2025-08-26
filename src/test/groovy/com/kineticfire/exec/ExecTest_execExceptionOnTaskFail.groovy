@@ -71,7 +71,7 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
 
         then: "result contains correct username"
         String usernameExpected = System.properties[ 'user.name' ]
-        result == usernameExpected;
+        result == usernameExpected
 
     }
 
@@ -132,11 +132,11 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
         List<String> task = Arrays.asList( 'whoami' )
 
         when: "execute the command"
-        String result = Exec.execExceptionOnTaskFail( task, null );
+        String result = Exec.execExceptionOnTaskFail( task, null )
 
         then: "result contains correct username"
         String usernameExpected = System.properties[ 'user.name' ]
-        result == usernameExpected;
+        result == usernameExpected
     }
 
     def "execExceptionOnTaskFail(List<String> task, Map<String,String> config) for valid task with one CL argument returns correct result"( ) {
@@ -149,7 +149,7 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
 
         then: "result contains correct username"
         String usernameExpected = System.properties[ 'user.name' ]
-        result == usernameExpected;
+        result == usernameExpected
 
     }
 
@@ -246,7 +246,7 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
         String result = Exec.execExceptionOnTaskFail( task, cfg )
 
         then: "returns the correct username from executing the command, with output untrimmed"
-        String usernameExpected = System.properties[ 'user.name' ] + System.lineSeparator( );
+        String usernameExpected = System.properties[ 'user.name' ] + System.lineSeparator( )
         usernameExpected == result
 
     }
@@ -483,7 +483,7 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
 
         then: "result contains correct username"
         String usernameExpected = System.properties[ 'user.name' ]
-        result == usernameExpected;
+        result == usernameExpected
     }
 
     def "execExceptionOnTaskFail(List<String> task, Map<String,String> config) throws exception if specify 'redirectErrFilePath'"( ) {
@@ -534,11 +534,11 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
         List<String> task = Arrays.asList( 'whoami' )
 
         when: "execute the command"
-        String result = Exec.execExceptionOnTaskFail( task, null, null, null );
+        String result = Exec.execExceptionOnTaskFail( task, null, null, null )
 
         then: "result contains correct username"
         String usernameExpected = System.properties[ 'user.name' ]
-        result == usernameExpected;
+        result == usernameExpected
     }
 
     def "execExceptionOnTaskFail(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) for valid task with one CL argument returns correct result"( ) {
@@ -551,7 +551,7 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
 
         then: "result contains correct username"
         String usernameExpected = System.properties[ 'user.name' ]
-        result == usernameExpected;
+        result == usernameExpected
 
     }
 
@@ -648,7 +648,7 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
         String result = Exec.execExceptionOnTaskFail( task, cfg, null, null )
 
         then: "returns the correct username from executing the command, with output untrimmed"
-        String usernameExpected = System.properties[ 'user.name' ] + System.lineSeparator( );
+        String usernameExpected = System.properties[ 'user.name' ] + System.lineSeparator( )
         usernameExpected == result
 
     }
@@ -883,7 +883,7 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
 
         then: "result contains correct username"
         String usernameExpected = System.properties[ 'user.name' ]
-        result == usernameExpected;
+        result == usernameExpected
     }
 
     def "execExceptionOnTaskFail(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) throws exception if specify 'redirectErrFilePath'"( ) {

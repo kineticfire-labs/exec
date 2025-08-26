@@ -285,7 +285,7 @@ class ExecTest_exec extends Specification {
         resultMap.exitValue == '0'
 
         and: "returns the correct username from executing the command in map key 'out', with output untrimmed"
-        String usernameExpected = System.properties[ 'user.name' ] + System.lineSeparator( );
+        String usernameExpected = System.properties[ 'user.name' ] + System.lineSeparator( )
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
@@ -1053,7 +1053,7 @@ class ExecTest_exec extends Specification {
         resultMap.exitValue == '0'
 
         and: "returns the correct username from executing the command in map key 'out', with output untrimmed"
-        String usernameExpected = System.properties[ 'user.name' ] + System.lineSeparator( );
+        String usernameExpected = System.properties[ 'user.name' ] + System.lineSeparator( )
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
