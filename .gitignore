@@ -31,3 +31,15 @@ replay_pid*
 build
 
 .idea/*
+
+# Claude local settings
+.claude/settings.local.json
+# Local CLAUDE.md file
+CLAUDE.local.md
+# Claude Flow temporary data
+.swarm/
+.hive-mind/
+# Local project commands
+.claude/commands/local/
+# MCP servers
+.serena/

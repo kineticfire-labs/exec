@@ -295,11 +295,11 @@ Run specific test classes:
 
 To build the project, these properties must be defined:
 - `project_release`: The version of the project release (must be valid semantic version)
-- `javaExec_lib_version`: The version of the library (must be valid semantic version)
+- `exec_lib_version`: The version of the library (must be valid semantic version)
 
 **Build command** (example with version 1.0.0):
 ```bash
-./gradlew -Pproject_release=1.0.0 -PjavaExec_lib_version=1.0.0 clean build
+./gradlew -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 clean build
 ```
 
 This produces:
@@ -314,13 +314,13 @@ This produces:
 
 **Generate Publication Files:**
 ```bash
-./gradlew -Pproject_release=1.0.0 -PjavaExec_lib_version=1.0.0 generatePomFileForMavenPublication
+./gradlew -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 generatePomFileForMavenPublication
 ```
 Generates POM file at `build/publications/maven/pom-default.xml` for inspection.
 
 **Publish to Local Repository:**
 ```bash
-./gradlew -Pproject_release=1.0.0 -PjavaExec_lib_version=1.0.0 publishToMavenLocal
+./gradlew -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 publishToMavenLocal
 ```
 Publishes to `~/.m2/repository/` to verify:
 - All artifacts generate correctly
@@ -343,7 +343,7 @@ Publishes to `~/.m2/repository/` to verify:
 
 2. **Publish to Central Portal:**
    ```bash
-   ./gradlew -Pproject_release=1.0.0 -PjavaExec_lib_version=1.0.0 publishAllPublicationsToCentralPortalRepository
+   ./gradlew -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 publishAllPublicationsToCentralPortalRepository
    ```
 
 ### **Known Issues**

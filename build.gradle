@@ -39,7 +39,7 @@ plugins {
 
 // properties that define versions that either must be set or default to a value of 'latest'; set on command line with
 // -Pproperty=value
-def requiredVersionPropertyList = ['project_release', 'javaExec_lib_version']
+def requiredVersionPropertyList = ['project_release', 'exec_lib_version']
 
 // throw exception, stopping build, if property doesn't satisfy version format
 checkRequiredVersionPropertyList( requiredVersionPropertyList )
@@ -79,8 +79,8 @@ def commonJarManifestMap = [
         'Implementation-Vendor'  : 'KineticFire Labs',
         'Implementation-Project' : "${project_title}",
         'Implementation-Release' : "${project_release}",
-        'Implementation-Title'   : "${javaExec_lib_title}",
-        'Implementation-Version' : "${javaExec_lib_version}",
+        'Implementation-Title'   : "${exec_lib_title}",
+        'Implementation-Version' : "${exec_lib_version}",
         'Implementation-URL'     : 'https://github.com/kineticfire-labs/exec/'
     ]
 
@@ -90,8 +90,8 @@ classesJarManifestMap.put( 'Name', 'com/kineticfire/exec/' )
 classesJarManifestMap.put( 'Sealed', 'true' )
 
 jar {
-    archiveBaseName = "${javaExec_lib_name}"
-    archiveVersion = "${javaExec_lib_version}"
+    archiveBaseName = "${exec_lib_name}"
+    archiveVersion = "${exec_lib_version}"
 
     manifest {
         attributes(
@@ -109,8 +109,8 @@ tasks.register('javadocJar', Jar) {
     archiveClassifier = 'javadoc'
     from javadoc
 
-    archiveBaseName = "${javaExec_lib_name}"
-    archiveVersion = "${javaExec_lib_version}"
+    archiveBaseName = "${exec_lib_name}"
+    archiveVersion = "${exec_lib_version}"
 
     manifest {
         attributes(
@@ -128,8 +128,8 @@ tasks.register('sourcesJar', Jar) {
     archiveClassifier = 'sources'
     from sourceSets.main.allSource
 
-    archiveBaseName = "${javaExec_lib_name}"
-    archiveVersion = "${javaExec_lib_version}"
+    archiveBaseName = "${exec_lib_name}"
+    archiveVersion = "${exec_lib_version}"
 
     manifest {
         attributes(
@@ -165,7 +165,7 @@ cyclonedxBom {
 
     projectType = 'library'
 
-    outputName = "${javaExec_lib_name}-${javaExec_lib_version}-cyclonedx"
+    outputName = "${exec_lib_name}-${exec_lib_version}-cyclonedx"
 
     includeConfigs = ['implementation']
     skipConfigs = ['testImplementation', 'testRuntimeOnly', 'api']
@@ -186,8 +186,8 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'com.kineticfire'
-            artifactId = "${javaExec_lib_name}"
-            version = "${javaExec_lib_version}"
+            artifactId = "${exec_lib_name}"
+            version = "${exec_lib_version}"
             
             from components.java
             
@@ -195,7 +195,7 @@ publishing {
             artifact sourcesJar
             
             pom {
-                name = "${javaExec_lib_title}"
+                name = "${exec_lib_title}"
                 description = 'A Java library for simplifying native system process execution and shell script validation'
                 url = 'https://github.com/kineticfire-labs/exec'
                 
