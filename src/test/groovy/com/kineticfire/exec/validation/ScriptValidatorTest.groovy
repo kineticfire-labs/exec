@@ -21,10 +21,6 @@
 package com.kineticfire.exec.validation
 
 import java.nio.file.Path
-import java.io.File
-import java.util.Map
-import java.util.List;
-import java.io.IOException;
 import static java.util.concurrent.TimeUnit.MINUTES
 
 import spock.lang.Specification

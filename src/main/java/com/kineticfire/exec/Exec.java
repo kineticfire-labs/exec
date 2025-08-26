@@ -20,11 +20,8 @@
  */
 package com.kineticfire.exec;
 
-import com.kineticfire.exec.TaskExecutionException;
-
 import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.BufferedReader;

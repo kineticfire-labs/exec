@@ -177,7 +177,7 @@ cyclonedxBom {
     attachmentText.setText( "Copyright (c) ${project_copyrightYears} KineticFire. All rights reserved.  Licensed under the Apache License, Version 2.0.  See included 'LICENSE' file or license URL." )
 
     License license = new License( )
-    license.setLicenseText( attachmentText );
+    license.setLicenseText( attachmentText )
     license.setId( 'Apache-2.0' )
     license.setUrl( 'https://www.apache.org/licenses/LICENSE-2.0' )
     licenseChoice {lc->

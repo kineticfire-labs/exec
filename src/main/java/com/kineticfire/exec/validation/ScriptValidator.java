@@ -173,17 +173,17 @@ public final class ScriptValidator {
    public static Map<String,String> validateScript( String script )
          throws IOException, UnsupportedOperationException {
 
-      Map<String,String> responseMap = new HashMap<String,String>( );
+      Map<String,String> responseMap;
 
       String os = System.getProperty( "os.name" ).toLowerCase( );
 
-      if ( os.indexOf( "win" ) >= 0 ) {
+      if (os.contains("win")) {
          throw new UnsupportedOperationException( "Script validation not supported on Windows." );
-      } else if ( os.indexOf( "mac" ) >= 0 ) {
+      } else if (os.contains("mac")) {
          throw new UnsupportedOperationException( "Script validation not supported on Mac." );
-      } else if ( os.indexOf( "nux" ) >= 0 || os.indexOf( "nix" ) >= 0 ) {
+      } else if (os.contains("nux") || os.contains("nix")) {
          responseMap = validateScriptForUnixLikePlatform( script );
-      } else if ( os.indexOf( "sunos" ) >= 0 ) {
+      } else if (os.contains("sunos")) {
          throw new UnsupportedOperationException( "Script validation is not supported on SunOS." );
       } else {
          throw new UnsupportedOperationException( "OS '" + System.getProperty( "os.name" ) + "' not supported by " +
