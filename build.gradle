@@ -150,7 +150,7 @@ artifacts {
 }
 
 license {
-    header rootProject.file( 'resources' + File.separator + 'LICENSE_HEADER' )
+    header = rootProject.file( 'resources' + File.separator + 'LICENSE_HEADER' )
     excludes( ["**/generated/**/*.java"] )
     mapping( 'java', 'SLASHSTAR_STYLE' )
 }
@@ -160,7 +160,7 @@ cyclonedxBom {
     OrganizationalContact organizationalContact = new OrganizationalContact()
     organizationalContact.setEmail( 'hello@kineticfire.com' )
 
-    organizationalEntity {oe->
+    organizationalEntity = {oe->
         oe.name = 'KineticFire Labs'
         oe.url = ['https://labs.kineticfire.com/', 'https://github.com/kineticfire-labs/exec/']
         oe.addContact( organizationalContact )
@@ -180,7 +180,7 @@ cyclonedxBom {
     license.setLicenseText( attachmentText )
     license.setId( 'Apache-2.0' )
     license.setUrl( 'https://www.apache.org/licenses/LICENSE-2.0' )
-    licenseChoice {lc->
+    licenseChoice = {lc->
         lc.addLicense( license )
     }
 }
