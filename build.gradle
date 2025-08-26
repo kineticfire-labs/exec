@@ -36,7 +36,7 @@ plugins {
 
 // properties that define versions that either must be set or default to a value of 'latest'; set on command line with
 // -Pproperty=value
-def requiredVersionPropertyList = ['project_release', 'javaUtil_lib_version']
+def requiredVersionPropertyList = ['project_release', 'javaExec_lib_version']
 
 // throw exception, stopping build, if property doesn't satisfy version format
 checkRequiredVersionPropertyList( requiredVersionPropertyList )
@@ -82,8 +82,8 @@ def commonJarManifestMap = [
         'Implementation-Vendor'  : 'KineticFire Labs',
         'Implementation-Project' : "${project_title}",
         'Implementation-Release' : "${project_release}",
-        'Implementation-Title'   : "${javaUtil_lib_title}",
-        'Implementation-Version' : "${javaUtil_lib_version}",
+        'Implementation-Title'   : "${javaExec_lib_title}",
+        'Implementation-Version' : "${javaExec_lib_version}",
         'Implementation-URL'     : 'https://github.com/kineticfire-labs/exec/'
     ]
 
@@ -93,8 +93,8 @@ classesJarManifestMap.put( 'Name', 'com/kineticfire/exec/' )
 classesJarManifestMap.put( 'Sealed', 'true' )
 
 jar {
-    archiveBaseName = "${javaUtil_lib_name}"
-    archiveVersion = "${javaUtil_lib_version}"
+    archiveBaseName = "${javaExec_lib_name}"
+    archiveVersion = "${javaExec_lib_version}"
 
     manifest {
         attributes(
@@ -112,8 +112,8 @@ tasks.register('javadocJar', Jar) {
     archiveClassifier = 'javadoc'
     from javadoc
 
-    archiveBaseName = "${javaUtil_lib_name}"
-    archiveVersion = "${javaUtil_lib_version}"
+    archiveBaseName = "${javaExec_lib_name}"
+    archiveVersion = "${javaExec_lib_version}"
 
     manifest {
         attributes(
@@ -131,8 +131,8 @@ tasks.register('sourcesJar', Jar) {
     archiveClassifier = 'sources'
     from sourceSets.main.allSource
 
-    archiveBaseName = "${javaUtil_lib_name}"
-    archiveVersion = "${javaUtil_lib_version}"
+    archiveBaseName = "${javaExec_lib_name}"
+    archiveVersion = "${javaExec_lib_version}"
 
     manifest {
         attributes(
@@ -168,7 +168,7 @@ cyclonedxBom {
 
     projectType = 'library'
 
-    outputName = "${javaUtil_lib_name}-${javaUtil_lib_version}-cyclonedx"
+    outputName = "${javaExec_lib_name}-${javaExec_lib_version}-cyclonedx"
 
     includeConfigs = ['implementation']
     skipConfigs = ['testImplementation', 'testRuntimeOnly', 'api']
@@ -187,43 +187,6 @@ cyclonedxBom {
 
 build.finalizedBy( 'cyclonedxBom' )
 
-tasks.register( 'readme' ) {
-    group 'Help'
-    description 'Displays an overview of the project and directions for building and releasing the project.'
-    doLast {
-
-        println """
---------------------------------------------------------------------
-readme
---------------------------------------------------------------------
-
---------------------------------------------------------------------
-Overview
-
-    Purpose:  Build and publish to Central Repository the 'exec' project artifacts.
-
-    Artifacts Produced
-        - exec-<version>.jar
-        - exec-<version>-javadoc.jar
-        - exec-<version>-sources.jar
-
---------------------------------------------------------------------
-Building & Releasing
-
-    --------------------------------------------------------------------
-    Development
-
-        - Test; build classes, sources, and javadocs JARs; produce CycloneDX SBOMs
-            => ./gradlew -Pproject_release=<version> -PjavaUtil_lib_version=<version> clean build
-
-    --------------------------------------------------------------------
-    Release
-        - tbd
-"""
-
-    }
-
-}
 
 /**
  * Checks that required properties' values adhere to the required format, throwing an error if not.  If not set, then
