@@ -61,7 +61,7 @@ public final class ScriptValidator {
     * @throws IllegalArgumentException
     *    if an illegal or inappropriate argument was passed to this method
     * @throws IOException
-    *    if an I/O error occurs
+    *    if an I/O error occurs, including if the required 'shellcheck' utility is not available on the system
     * @throws NullPointerException
     *    if an element in task list is null
     * @throws SecurityException
@@ -108,7 +108,7 @@ public final class ScriptValidator {
     * @throws IllegalArgumentException
     *    if an illegal or inappropriate argument was passed to this method
     * @throws IOException
-    *    if an I/O error occurs
+    *    if an I/O error occurs, including if the required 'shellcheck' utility is not available on the system
     * @throws NullPointerException
     *    if an element in task list is null
     * @throws SecurityException
@@ -154,7 +154,7 @@ public final class ScriptValidator {
     * @throws IllegalArgumentException
     *    if an illegal or inappropriate argument was passed to this method
     * @throws IOException
-    *    if an I/O error occurs
+    *    if an I/O error occurs, including if the required 'shellcheck' utility is not available on the system
     * @throws NullPointerException
     *    if an element in task list is null
     * @throws SecurityException
@@ -225,7 +225,7 @@ public final class ScriptValidator {
     * @throws IllegalArgumentException
     *    if an illegal or inappropriate argument was passed to this method
     * @throws IOException
-    *    if an I/O error occurs
+    *    if an I/O error occurs, including if the required 'shellcheck' utility is not available on the system
     * @throws NullPointerException
     *    if an element in task list is null
     * @throws SecurityException
@@ -241,6 +241,8 @@ public final class ScriptValidator {
    private static Map<String,String> validateScriptForUnixLikePlatform( String script )
       throws IOException {
 
+      ensureShellcheckAvailable();
+
       List<String> task = Arrays.asList( "shellcheck", script );
 
       Map<String,String> responseMap = Exec.exec( task );
@@ -253,6 +255,44 @@ public final class ScriptValidator {
 
       return( responseMap );
 
+   }
+
+   /**
+    * Ensures that the 'shellcheck' utility is available on the system for script validation.
+    * <p>
+    * This method checks if the 'shellcheck' command is available in the system PATH by attempting to execute
+    * 'which shellcheck'. If 'shellcheck' is not found, it throws an IOException with helpful installation
+    * instructions.
+    * 
+    * @throws IOException
+    *    if 'shellcheck' is not available on the system, with detailed installation instructions
+    */
+   private static void ensureShellcheckAvailable() throws IOException {
+      try {
+         List<String> whichTask = Arrays.asList( "which", "shellcheck" );
+         Map<String,String> result = Exec.exec( whichTask );
+         
+         if ( !result.get( "exitValue" ).equals( "0" ) ) {
+            throw new IOException( createShellcheckUnavailableMessage() );
+         }
+      } catch ( IOException e ) {
+         throw new IOException( createShellcheckUnavailableMessage(), e );
+      }
+   }
+
+   /**
+    * Creates a helpful error message when shellcheck is not available.
+    * 
+    * @return detailed error message with installation instructions
+    */
+   private static String createShellcheckUnavailableMessage() {
+      return "The 'shellcheck' utility is required for script validation but is not available on this system. " +
+             "Please install shellcheck using one of the following methods:\n" +
+             "  - Ubuntu/Debian: apt install shellcheck\n" +
+             "  - CentOS/RHEL/Fedora: yum install ShellCheck (or dnf install ShellCheck)\n" +
+             "  - macOS: brew install shellcheck\n" +
+             "  - From source: https://github.com/koalaman/shellcheck#installing\n" +
+             "After installation, ensure 'shellcheck' is available in your system PATH.";
    }
 
 

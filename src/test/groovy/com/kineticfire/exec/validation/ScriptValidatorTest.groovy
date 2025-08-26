@@ -209,4 +209,21 @@ class ScriptValidatorTest extends Specification {
         thrown NullPointerException
     }
 
+    def "validateScript works correctly when shellcheck is available"( ) {
+
+        given: "a valid bash script"
+        script <<
+            """#!/bin/env bash
+            echo "test"
+            exit 0
+        """.stripIndent( )
+
+        when: "validate the bash script with shellcheck available"
+        Map<String,String> resultMap = ScriptValidator.validateScript( script.getAbsolutePath( ) )
+
+        then: "validation succeeds without errors"
+        resultMap.isValid == 'true'
+        resultMap.exitValue == '0'
+    }
+
 }

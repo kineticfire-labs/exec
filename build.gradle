@@ -89,7 +89,7 @@ def commonJarManifestMap = [
 
 def classesJarManifestMap = [:]
 classesJarManifestMap.putAll( commonJarManifestMap )
-classesJarManifestMap.put( 'Name', 'com/kineticfire/util/' )
+classesJarManifestMap.put( 'Name', 'com/kineticfire/exec/' )
 classesJarManifestMap.put( 'Sealed', 'true' )
 
 jar {
