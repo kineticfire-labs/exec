@@ -764,7 +764,7 @@ public final class Exec {
 
          // 'task' can't be null, otherwise Process would have thrown NullPointerException
          for ( String item : task ) {
-             taskSb.append( item + "," );
+             taskSb.append(item).append(",");
          }
 
          taskSb.deleteCharAt( taskSb.length( ) - 1 ); // remove dangling ','
@@ -772,12 +772,12 @@ public final class Exec {
          taskSb.append( "]" );
 
 
-         messageSb.append( "Executing task '" + taskSb + "' failed with exit value '" + exitValue + "." );
+         messageSb.append("Executing task '").append(taskSb).append("' failed with exit value '").append(exitValue).append(".");
 
          // key 'err' always defined in this case, since error cannot be redirected output or a file; 'err' may be empty
          // String
-         if ( !resultMap.get( "err" ).equals( "" ) ) {
-            messageSb.append( "  " + resultMap.get( "err" ) );
+         if (!resultMap.get("err").isEmpty()) {
+            messageSb.append("  ").append(resultMap.get("err"));
          }
 
         throw( new TaskExecutionException( messageSb.toString( ), exitValue ) );

@@ -61,7 +61,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task) for valid task with one CL argument returns exitValue of 0"( ) {
@@ -80,7 +80,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task) for invalid task returns non-zero exitValue"( ) {
@@ -152,7 +152,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String>, config) for valid task with one CL argument returns exitValue of 0"( ) {
@@ -171,7 +171,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config) for invalid task returns non-zero exitValue"( ) {
@@ -240,7 +240,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
 
@@ -268,7 +268,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config) returns untrimmed output when trim=false"( ) {
@@ -289,7 +289,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config) throws exception for invalid trim value"( ) {
@@ -334,7 +334,7 @@ class ExecTest_exec extends Specification {
         System.getProperty('user.dir') == oldWorkingDir
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     // ********************************************************
@@ -361,7 +361,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config) when redirecting error to output (returned string, not file) for invalid task returns error output in standard output"( ) {
@@ -381,7 +381,7 @@ class ExecTest_exec extends Specification {
         resultMap.out.contains( 'invalid option' )
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config) when explicitly not redirecting error to output (returned string, not file) (redirectErrToOut=false) for valid task returns with no error output property"( ) {
@@ -402,7 +402,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config) when explicitly not redirecting error to output (returned string, not file) (redirectErrToOut=false) for invalid task returns error output property"( ) {
@@ -467,10 +467,10 @@ class ExecTest_exec extends Specification {
         Files.readString(Path.of(outFilePath)).trim() == 'user'
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config) for invalid task when redirecting output to file"( ) {
@@ -492,7 +492,7 @@ class ExecTest_exec extends Specification {
         Files.readString(Path.of(outFilePath)).trim() == ''
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' contains error message"
         resultMap.err.contains( 'invalid option' )
@@ -521,10 +521,10 @@ class ExecTest_exec extends Specification {
         Files.readString(Path.of(outFilePath)).trim() == 'user'
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config) appends to existing file when output redirected to file with option 'append'"( ) {
@@ -550,10 +550,10 @@ class ExecTest_exec extends Specification {
         Files.readString(Path.of(outFilePath)).trim() == originalContent + 'user'
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config) throws error when given redirectOutFilePath but no redirectOutType"( ) {
@@ -629,10 +629,10 @@ class ExecTest_exec extends Specification {
         Files.readString(Path.of(outFilePath)).trim() == 'user'
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config) for invalid task when redirecting error to out, and output to file"( ) {
@@ -655,10 +655,10 @@ class ExecTest_exec extends Specification {
         Files.readString( Path.of( outFilePath ) ).trim( ).contains( 'invalid option' )
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
 
@@ -688,7 +688,7 @@ class ExecTest_exec extends Specification {
         resultMap.out == 'user'
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "err file has no contents"
         Files.readString(Path.of(errFilePath)) == ''
@@ -713,7 +713,7 @@ class ExecTest_exec extends Specification {
         resultMap.out == ''
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "err file has error output"
         Files.readString( Path.of( errFilePath ) ).contains( 'invalid option' )
@@ -742,7 +742,7 @@ class ExecTest_exec extends Specification {
         resultMap.out == ''
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "err file has error output"
         Files.readString( Path.of( errFilePath ) ).trim( ).contains( 'invalid option' )
@@ -771,7 +771,7 @@ class ExecTest_exec extends Specification {
         resultMap.out == ''
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "map key 'err' has original contents plus error output"
         Files.readString( Path.of( errFilePath ) ).trim( ).contains( originalContent + 'id: invalid option' )
@@ -852,10 +852,10 @@ class ExecTest_exec extends Specification {
         Files.readString(Path.of(outFilePath)).trim() == 'user'
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "err file has no contents"
         Files.readString(Path.of(errFilePath)) == ''
@@ -883,10 +883,10 @@ class ExecTest_exec extends Specification {
         Files.readString(Path.of(outFilePath)) == ''
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "err file has error output"
         Files.readString( Path.of( errFilePath ) ).contains( 'invalid option' )
@@ -920,7 +920,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) for valid task with one CL argument returns exitValue of 0"( ) {
@@ -939,7 +939,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) for invalid task returns non-zero exitValue"( ) {
@@ -1008,7 +1008,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
 
@@ -1036,7 +1036,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) returns untrimmed output when trim=false"( ) {
@@ -1057,7 +1057,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) throws exception for invalid trim value"( ) {
@@ -1102,7 +1102,7 @@ class ExecTest_exec extends Specification {
         System.getProperty( 'user.dir' ).equals( oldWorkingDir )
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     // ********************************************************
@@ -1129,7 +1129,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) when redirecting error to output (returned string, not file) for invalid task returns error output in standard output"( ) {
@@ -1149,7 +1149,7 @@ class ExecTest_exec extends Specification {
         resultMap.out.contains( 'invalid option' )
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) when explicitly not redirecting error to output (returned string, not file) (redirectErrToOut=false) for valid task returns with no error output property"( ) {
@@ -1170,7 +1170,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) when explicitly not redirecting error to output (returned string, not file) (redirectErrToOut=false) for invalid task returns error output property"( ) {
@@ -1235,10 +1235,10 @@ class ExecTest_exec extends Specification {
         Files.readString( Path.of( outFilePath ) ).trim( ).equals( 'user' )
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) for invalid task when redirecting output to file"( ) {
@@ -1260,7 +1260,7 @@ class ExecTest_exec extends Specification {
         Files.readString(Path.of(outFilePath)).trim() == ''
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' contains error message"
         resultMap.err.contains( 'invalid option' )
@@ -1289,10 +1289,10 @@ class ExecTest_exec extends Specification {
         Files.readString(Path.of(outFilePath)).trim() == 'user'
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) appends to existing file when output redirected to file with option 'append'"( ) {
@@ -1318,10 +1318,10 @@ class ExecTest_exec extends Specification {
         Files.readString(Path.of(outFilePath)).trim() == originalContent + 'user'
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) throws error when given redirectOutFilePath but no redirectOutType"( ) {
@@ -1397,10 +1397,10 @@ class ExecTest_exec extends Specification {
         Files.readString( Path.of( outFilePath ) ).trim( ).equals( 'user' )
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) for invalid task when redirecting error to out, and output to file"( ) {
@@ -1423,10 +1423,10 @@ class ExecTest_exec extends Specification {
         Files.readString( Path.of( outFilePath ) ).trim( ).contains( 'invalid option' )
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
 
@@ -1456,7 +1456,7 @@ class ExecTest_exec extends Specification {
         resultMap.out == 'user'
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "err file has no contents"
         Files.readString(Path.of(errFilePath)) == ''
@@ -1481,7 +1481,7 @@ class ExecTest_exec extends Specification {
         resultMap.out == ''
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "err file has error output"
         Files.readString( Path.of( errFilePath ) ).contains( 'invalid option' )
@@ -1510,7 +1510,7 @@ class ExecTest_exec extends Specification {
         resultMap.out == ''
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "err file has error output"
         Files.readString( Path.of( errFilePath ) ).trim( ).contains( 'invalid option' )
@@ -1539,7 +1539,7 @@ class ExecTest_exec extends Specification {
         resultMap.out == ''
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "map key 'err' has original contents plus error output"
         Files.readString( Path.of( errFilePath ) ).trim( ).contains( originalContent + 'id: invalid option' )
@@ -1620,10 +1620,10 @@ class ExecTest_exec extends Specification {
         Files.readString( Path.of( outFilePath ) ).trim( ).equals( 'user' )
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "err file has no contents"
         Files.readString( Path.of( errFilePath ) ).equals( '' )
@@ -1651,10 +1651,10 @@ class ExecTest_exec extends Specification {
         Files.readString( Path.of( outFilePath ) ).equals( '' )
 
         and: "map key 'out' is not present"
-        resultMap.containsKey( 'out' ) == false
+        !resultMap.containsKey('out')
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
 
         and: "err file has error output"
         Files.readString( Path.of( errFilePath ) ).contains( 'invalid option' )
@@ -1683,7 +1683,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) returns correctly with one key-value pair in 'addEnv'"( ) {
@@ -1703,7 +1703,7 @@ class ExecTest_exec extends Specification {
         resultMap.out.contains( 'GREET=HOWDY' )
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) returns correctly with more than one key-value pair in 'addEnv'"( ) {
@@ -1725,7 +1725,7 @@ class ExecTest_exec extends Specification {
         resultMap.out.contains( 'GREET2=HEY' )
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
 
@@ -1751,7 +1751,7 @@ class ExecTest_exec extends Specification {
         usernameExpected == resultMap.out
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) returns correctly with one env var in 'removeEnv' to remove"( ) {
@@ -1774,7 +1774,7 @@ class ExecTest_exec extends Specification {
         !resultMap.out.contains( 'GREET=' )
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
     def "exec(List<String> task, Map<String,String> config, Map<String,String> addEnv, List<String> removeEnv) returns correctly with more than one env var in 'removeEnv' to remove"( ) {
@@ -1799,7 +1799,7 @@ class ExecTest_exec extends Specification {
         !resultMap.out.contains( 'GREET2=' )
 
         and: "map key 'err' is not present"
-        resultMap.containsKey( 'err' ) == false
+        !resultMap.containsKey('err')
     }
 
 }

@@ -328,7 +328,7 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
         cfg.put( 'redirectOutType', 'overwrite' )
 
         when: "execute the command"
-        String result = Exec.execExceptionOnTaskFail( task, cfg )
+        Exec.execExceptionOnTaskFail( task, cfg )
 
         then: "thrown exception"
         def e = thrown( TaskExecutionException )
@@ -446,7 +446,7 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
         given: "valid command to run"
         List<String> task = Arrays.asList( 'id', '-un' )
         Map<String,String> cfg = new HashMap<String,String>( )
-        String errFilePath = tempDir.toString( ) + File.separator + 'test.txt'
+        tempDir.toString( ) + File.separator + 'test.txt'
         cfg.put( 'redirectErrToOut', 'true' )
 
         when: "execute the command"
@@ -461,7 +461,7 @@ class ExecTest_execExceptionOnTaskFail extends Specification {
         given: "valid command to run"
         List<String> task = Arrays.asList( 'id', '-un' )
         Map<String,String> cfg = new HashMap<String,String>( )
-        String errFilePath = tempDir.toString( ) + File.separator + 'test.txt'
+        tempDir.toString( ) + File.separator + 'test.txt'
         cfg.put( 'redirectErrToOut', 'illegal-value' )
 
         when: "execute the command"

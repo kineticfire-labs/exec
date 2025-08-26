@@ -285,13 +285,14 @@ public final class ScriptValidator {
     * @return detailed error message with installation instructions
     */
    private static String createShellcheckUnavailableMessage() {
-      return "The 'shellcheck' utility is required for script validation but is not available on this system. " +
-             "Please install shellcheck using one of the following methods:\n" +
-             "  - Ubuntu/Debian: apt install shellcheck\n" +
-             "  - CentOS/RHEL/Fedora: yum install ShellCheck (or dnf install ShellCheck)\n" +
-             "  - macOS: brew install shellcheck\n" +
-             "  - From source: https://github.com/koalaman/shellcheck#installing\n" +
-             "After installation, ensure 'shellcheck' is available in your system PATH.";
+      return """
+              The 'shellcheck' utility is required for script validation but is not available on this system.
+              Please install shellcheck using one of the following methods:
+                - Ubuntu/Debian: apt install shellcheck
+                - CentOS/RHEL/Fedora: yum install ShellCheck (or dnf install ShellCheck)
+                - macOS: brew install shellcheck
+                - From source: https://github.com/koalaman/shellcheck#installing
+              After installation, ensure 'shellcheck' is available in your system PATH.""";
    }
 
 
