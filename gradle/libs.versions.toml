@@ -16,19 +16,22 @@
 # KineticFire Labs: https://labs.kineticfire.com/
 #     project site: https://github.com/kineticfire-labs/exec/
 
+[versions]
+groovy = "4.0.28"
+spockCore = "2.4-M6-groovy-4.0"
+junit = "5.13.4"
+hierynomus = "0.16.1"
+cycloneDX = "2.3.1"
 
-# project
-project_title=Exec
-# project_release set as property on command line
-project_copyrightYears=2023-2025
+[libraries]
+groovy = { module = "org.apache.groovy:groovy", version.ref = "groovy" }
+spock-core = { module = "org.spockframework:spock-core", version.ref = "spockCore" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 
-# artifacts
-javaExec_lib_title=Exec
-javaExec_lib_name=exec
-# javaExec_lib_version set as property on command line
+[bundles]
+testing = ["groovy", "spock-core", "junit-jupiter-api"]
 
-# configurations
-javaLanguage_version=21
-
-# dependencies
-# (dependency versions now managed in gradle/libs.versions.toml)
+[plugins]
+license = { id = "com.github.hierynomus.license", version.ref = "hierynomus" }
+cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cycloneDX" }

@@ -33,13 +33,52 @@ todo
 ### Test
 Run tests with: `./gradlew test`
 
-### Build and Release
+### Build
 To build, these properties must be defined:
 - `project_release`: the version of the project release, which must be a valid semantic version
 - `Exec_lib_version`: the version of the library, which must be a valid semantic version
 
 Build with, assuming both versions above are `1.0.0`: 
 `./gradlew -Pproject_release=1.0.0 -PjavaExec_lib_version=1.0.0 clean build`
+
+### Release
+
+#### Test Publish
+
+##### Generate Publication Files
+
+Run the command:
+`./gradlew -Pproject_release=1.0.0 -PjavaExec_lib_version=1.0.0 generatePomFileForMavenPublication`
+
+This generates the POM file at `build/publications/maven/pom-default.xml`;  inspect all metadata before publishing.
+
+##### Publish to Local Repository
+
+Run the command:
+`./gradlew -Pproject_release=1.0.0 -PjavaExec_lib_version=1.0.0 publishToMavenLocal`
+
+This publishes to your local Maven repository at `~/.m2/repository/` to verify:
+- All artifacts are generated correctly
+- POM metadata is complete
+- No build errors occur
+- JAR contents are correct
+
+#### Publish to Maven Central Portal
+1. Set up credentials (environment variables or `~/.gradle/gradle.properties` and **NEVER** in the repository:
+```
+# Central Portal Publishing Credentials
+centralPortalUsername=your-maven-central-username
+centralPortalPassword=your-maven-central-password
+
+# GPG Signing Configuration
+signingKey=-----BEGIN PGP PRIVATE KEY BLOCK-----\n...\n-----END PGP PRIVATE KEY BLOCK-----
+signingPassword=your-gpg-key-passphrase
+```
+1. Publish to Central Portal with: `./gradlew -Pproject_release=1.0.0 -PjavaExec_lib_version=1.0.0 publishAllPublicationsToCentralPortalRepository`
+
+### Known Issues
+The license plugin has a configuration cache compatibility issue with Gradle 9. Use --no-configuration-cache flag until 
+the plugin is updated. This doesn't affect functionality, only performance.
 
 ## License
 The `exec` project is released under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)

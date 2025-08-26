@@ -30,8 +30,11 @@ plugins {
     id 'groovy'
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
-    id 'com.github.hierynomus.license' version "${hierynomus_version}"
-    id 'org.cyclonedx.bom' version "${cyloneDX_version}"
+    // Maven publishing for Central Portal
+    id 'maven-publish'
+    id 'signing'
+    alias(libs.plugins.license)
+    alias(libs.plugins.cyclonedx)
 }
 
 // properties that define versions that either must be set or default to a value of 'latest'; set on command line with
@@ -49,16 +52,10 @@ repositories {
 dependencies {
 
     // Use the latest Groovy version for Spock testing
-    testImplementation "org.apache.groovy:groovy:${groovy_version}"
+    testImplementation libs.bundles.testing
 
-    // Use the awesome Spock testing and specification framework even with Java
-    testImplementation "org.spockframework:spock-core:${spockCore_version}"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_version}"
+    testRuntimeOnly libs.junit.platform.launcher
 
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api "org.apache.commons:commons-math3:${apacheCommonsMath3_version}"
 
 }
 
@@ -182,6 +179,77 @@ cyclonedxBom {
     license.setUrl( 'https://www.apache.org/licenses/LICENSE-2.0' )
     licenseChoice = {lc->
         lc.addLicense( license )
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.kineticfire'
+            artifactId = "${javaExec_lib_name}"
+            version = "${javaExec_lib_version}"
+            
+            from components.java
+            
+            artifact javadocJar
+            artifact sourcesJar
+            
+            pom {
+                name = "${javaExec_lib_title}"
+                description = 'A Java library for simplifying native system process execution and shell script validation'
+                url = 'https://github.com/kineticfire-labs/exec'
+                
+                licenses {
+                    license {
+                        name = 'Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0'
+                        distribution = 'repo'
+                    }
+                }
+                
+                developers {
+                    developer {
+                        id = 'kineticfire-labs'
+                        name = 'KineticFire Labs'
+                        email = 'hello@kineticfire.com'
+                        organization = 'KineticFire Labs'
+                        organizationUrl = 'https://labs.kineticfire.com/'
+                    }
+                }
+                
+                scm {
+                    connection = 'scm:git:ssh://git@github.com:kineticfire-labs/exec.git'
+                    developerConnection = 'scm:git:ssh://git@github.com:kineticfire-labs/exec.git'
+                    url = 'https://github.com/kineticfire-labs/exec'
+                }
+                
+                issueManagement {
+                    system = 'GitHub Issues'
+                    url = 'https://github.com/kineticfire-labs/exec/issues'
+                }
+            }
+        }
+    }
+    
+    repositories {
+        maven {
+            name = 'CentralPortal'
+            url = 'https://central.sonatype.com/api/v1/publisher/upload'
+            credentials {
+                username = findProperty('centralPortalUsername') ?: System.getenv('CENTRAL_PORTAL_USERNAME')
+                password = findProperty('centralPortalPassword') ?: System.getenv('CENTRAL_PORTAL_PASSWORD')
+            }
+        }
+    }
+}
+
+signing {
+    def signingKey = findProperty('signingKey') ?: System.getenv('SIGNING_KEY')
+    def signingPassword = findProperty('signingPassword') ?: System.getenv('SIGNING_PASSWORD')
+    
+    if (signingKey && signingPassword) {
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign publishing.publications.maven
     }
 }
 
