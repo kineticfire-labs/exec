@@ -26,13 +26,12 @@
  import org.cyclonedx.model.AttachmentText
 
 plugins {
-    // Apply the groovy plugin to also add support for Groovy (needed for Spock)
+    // needed for Spock
     id 'groovy'
-    // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
-    // Maven publishing for Central Portal
     id 'maven-publish'
     id 'signing'
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     alias(libs.plugins.license)
     alias(libs.plugins.cyclonedx)
 }
@@ -64,6 +63,8 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of( getProperty( 'javaLanguage_version' ) as Integer )
     }
+    withSourcesJar()
+    withJavadocJar()
 }
 
 tasks.named( 'test' ) {
@@ -229,12 +230,26 @@ publishing {
                 }
             }
         }
+        from components.java
+        artifact javadocJar
+        artifact sourcesJar
     }
-    
+
     repositories {
+        // RELEASES via OSSRH Staging API compatibility bridge → Central
         maven {
-            name = 'CentralPortal'
-            url = 'https://central.sonatype.com/api/v1/publisher/upload'
+            name = 'sonatypeStaging'
+            url = uri('https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/')
+            credentials {
+                username = findProperty('centralPortalUsername') ?: System.getenv('CENTRAL_PORTAL_USERNAME')
+                password = findProperty('centralPortalPassword') ?: System.getenv('CENTRAL_PORTAL_PASSWORD')
+            }
+        }
+
+        // optional: SNAPSHOTS
+        maven {
+            name = 'sonatypeSnapshots'
+            url = uri('https://central.sonatype.com/repository/maven-snapshots/')
             credentials {
                 username = findProperty('centralPortalUsername') ?: System.getenv('CENTRAL_PORTAL_USERNAME')
                 password = findProperty('centralPortalPassword') ?: System.getenv('CENTRAL_PORTAL_PASSWORD')
@@ -250,6 +265,18 @@ signing {
     if (signingKey && signingPassword) {
         useInMemoryPgpKeys(signingKey, signingPassword)
         sign publishing.publications.maven
+    }
+}
+
+// auto close & release after publish
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri('https://ossrh-staging-api.central.sonatype.com/service/local/'))
+            snapshotRepositoryUrl.set(uri('https://central.sonatype.com/repository/maven-snapshots/'))
+            username.set(providers.gradleProperty('centralPortalUsername'))
+            password.set(providers.gradleProperty('centralPortalPassword'))
+        }
     }
 }
 

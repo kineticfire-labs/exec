@@ -346,9 +346,17 @@ Publishes to `~/.m2/repository/` to verify:
    ./gradlew -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 publishAllPublicationsToCentralPortalRepository
    ```
 
+##### Release (push → close → release → visible in Portal)
+`./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0`
+
+##### Snapshots
+`./gradlew publishAllPublicationsToSonatypeSnapshotsRepository`
+
+
 ### **Known Issues**
 
-- **Configuration Cache**: The license plugin has compatibility issues with Gradle 9's configuration cache. Use `--no-configuration-cache` flag until the plugin is updated. This affects build performance only, not functionality.
+- **Configuration Cache**: The license plugin has compatibility issues with Gradle 9's configuration cache. 
+Use `--no-configuration-cache` flag until the plugin is updated. This affects build performance only, not functionality.
 
 ## License
 The `exec` project is released under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
