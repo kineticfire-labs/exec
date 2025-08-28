@@ -318,15 +318,15 @@ This produces:
 
 **Generate Publication Files:**
 ```bash
-./gradlew -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 generatePomFileForMavenPublication
+./gradlew generatePomFileForMavenPublication -Pexec_lib_version=1.0.0  --no-configuration-cache
 ```
 Generates POM file at `build/publications/maven/pom-default.xml` for inspection.
 
 **Publish to Local Repository:**
 ```bash
-./gradlew -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 publishToMavenLocal
+./gradlew publishToMavenLocal -Pexec_lib_version=1.0.0  --no-configuration-cache
 ```
-Publishes to `~/.m2/repository/` to verify:
+Publishes to `ls -al ~/.m2/repository/com/kineticfire/exec/1.0.0`.  Check there to verify:
 - All artifacts generate correctly
 - POM metadata is complete
 - No build errors occur
@@ -349,11 +349,11 @@ Publishes to `~/.m2/repository/` to verify:
 2. **Publish to Central Portal:**
 
 Stage:
-`./gradlew publishToSonatype closeSonatypeStagingRepository -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 --no-configuration-cache --info`
+`./gradlew publishToSonatype closeSonatypeStagingRepository -Pexec_lib_version=1.0.0 --no-configuration-cache --info`
 
 Then check Central Portal.  Click the "Publish" button to publish, else "Drop" to drop.
 
-Or combined: `./gradlew publishToSonatype closeSonatypeStagingRepository closeAndReleaseSonatypeStagingRepository -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 --no-configuration-cache --info`
+Or combined: `./gradlew publishToSonatype closeSonatypeStagingRepository closeAndReleaseSonatypeStagingRepository -Pexec_lib_version=1.0.0 --no-configuration-cache --info`
 
 ### **Known Issues**
 

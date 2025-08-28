@@ -36,9 +36,8 @@ plugins {
     alias(libs.plugins.cyclonedx)
 }
 
-// properties that define versions that either must be set or default to a value of 'latest'; set on command line with
-// -Pproperty=value
-def requiredVersionPropertyList = ['project_release', 'exec_lib_version']
+// properties that define versions the MUST be set; set on command line with -Pproperty=value
+def requiredVersionPropertyList = ['exec_lib_version']
 
 group = 'com.kineticfire'
 version = (findProperty('exec_lib_version') ?: '0.0.0-SNAPSHOT').toString()
@@ -78,7 +77,6 @@ javadoc {
 def commonJarManifestMap = [
         'Implementation-Vendor'  : 'KineticFire Labs',
         'Implementation-Project' : "${project_title}",
-        'Implementation-Release' : "${project_release}",
         'Implementation-Title'   : "${exec_lib_title}",
         'Implementation-Version' : "${exec_lib_version}",
         'Implementation-URL'     : 'https://github.com/kineticfire-labs/exec/'
@@ -200,7 +198,6 @@ signing {
     sign publishing.publications
 }
 
-// auto close & release after publish
 nexusPublishing {
     repositories {
         sonatype {
@@ -220,8 +217,7 @@ nexusPublishing {
 build.finalizedBy( 'cyclonedxBom' )
 
 /**
- * Checks that required properties' values adhere to the required format, throwing an error if not.  If not set, then
- * sets the property value to 'latest'.
+ * Checks that required properties' values adhere to the required format, throwing an error if not.
  * <p>
  * A valid format is 'latest' or:
  * <ul>
@@ -230,6 +226,8 @@ build.finalizedBy( 'cyclonedxBom' )
  *    <li>each 'number' is a non-negative integer consisting of one or more digits 0-9 such that a number cannot have a
  *    leading '0' (but a 'number' can be exactly '0')</li>
  * </ul>
+ *
+ * <p>Errors if not set.</p>
  *
  * @param propertyList
  *    a list of String properties to check
@@ -249,9 +247,8 @@ void checkRequiredVersionPropertyList( propertyList ) {
             }
 
         } else {
-            String value = 'latest'
-            ext[property]=value
-            println "Property not defined, setting to default:  $property=$value"
+            throw new GradleException( "Required property '$property' is missing. Pass it on the command line, " +
+                    "e.g. -P$property=1.0.0");
         }
     }
 }
