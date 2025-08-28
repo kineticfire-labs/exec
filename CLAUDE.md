@@ -19,7 +19,7 @@ The goals of the `exec` project are to simplify:
 ## TECH STACK
 - **Language**: Java
 - **Build and Dependency Management**: Gradle
-- **Testing and Specification Framework**: Spock
+- **Testing and Specification Framework**: JUnit and Spock
 - **Test DSL**: Groovy
 - **Version Control:** Git
 - **AI-assisted Infrastructure-as-Code & DevOps:** Claude Code
