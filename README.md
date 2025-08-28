@@ -1,6 +1,9 @@
 # exec
 [![Powered by KineticFire Labs](https://img.shields.io/badge/Powered_by-KineticFire_Labs-CDA519?link=https%3A%2F%2Flabs.kineticfire.com%2F)](https://labs.kineticfire.com/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Maven Central Version](https://img.shields.io/maven-central/v/com.kineticfire/exec)](https://central.sonatype.com/artifact/com.kineticfire/exec)
+
+
 <p></p>
 `exec` is a Java library for executing native system processes and validating shell scripts.  It provides flexible APIs 
 to run commands and return results as strings, maps, or exceptions, plus utilities for script analysis.
@@ -38,7 +41,8 @@ to run commands and return results as strings, maps, or exceptions, plus utiliti
 
 ## Installation
 
-Add `exec` to your project using your preferred build system:
+Add `exec` to your project using your preferred build system as below.  The `exec library is published at 
+[Maven Central Repository](https://central.sonatype.com/artifact/com.kineticfire/exec).
 
 ### **Gradle**
 
