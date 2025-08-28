@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2023-2025 'exec' Contributors. All rights reserved.
+ * (c) Copyright 2023-2025 exec Contributors. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -193,26 +193,6 @@ publishing {
             }
         }
     }
-
-    //todo
-//    repositories {
-//        maven {
-//            name = 'sonatypeStaging'
-//            url = uri('https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/')
-//            credentials {
-//                username = findProperty('centralPortalUsername') ?: System.getenv('CENTRAL_PORTAL_USERNAME')
-//                password = findProperty('centralPortalPassword') ?: System.getenv('CENTRAL_PORTAL_PASSWORD')
-//            }
-//        }
-//        maven {
-//            name = 'sonatypeSnapshots'
-//            url = uri('https://central.sonatype.com/repository/maven-snapshots/')
-//            credentials {
-//                username = findProperty('centralPortalUsername') ?: System.getenv('CENTRAL_PORTAL_USERNAME')
-//                password = findProperty('centralPortalPassword') ?: System.getenv('CENTRAL_PORTAL_PASSWORD')
-//            }
-//        }
-//    }
 }
 
 signing {
