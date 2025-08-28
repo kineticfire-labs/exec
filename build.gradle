@@ -40,6 +40,9 @@ plugins {
 // -Pproperty=value
 def requiredVersionPropertyList = ['project_release', 'exec_lib_version']
 
+group = 'com.kineticfire'
+version = (findProperty('exec_lib_version') ?: '0.0.0-SNAPSHOT').toString()
+
 // throw exception, stopping build, if property doesn't satisfy version format
 checkRequiredVersionPropertyList( requiredVersionPropertyList )
 
@@ -49,13 +52,9 @@ repositories {
 }
 
 dependencies {
-
     // Use the latest Groovy version for Spock testing
     testImplementation libs.bundles.testing
-
     testRuntimeOnly libs.junit.platform.launcher
-
-
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -92,7 +91,6 @@ classesJarManifestMap.put( 'Sealed', 'true' )
 
 jar {
     archiveBaseName = "${exec_lib_name}"
-    archiveVersion = "${exec_lib_version}"
 
     manifest {
         attributes(
@@ -105,46 +103,18 @@ jar {
     }
 }
 
-tasks.register('javadocJar', Jar) {
-
-    archiveClassifier = 'javadoc'
-    from javadoc
-
+tasks.named('sourcesJar') {
     archiveBaseName = "${exec_lib_name}"
-    archiveVersion = "${exec_lib_version}"
-
-    manifest {
-        attributes(
-            commonJarManifestMap
-        )
-    }
-
-    from( rootProject.projectDir ) {
-        include 'LICENSE/'
-    }
+    archiveVersion  = project.version
+    manifest { attributes(commonJarManifestMap) }
+    from(rootProject.projectDir) { include 'LICENSE/' }
 }
 
-tasks.register('sourcesJar', Jar) {
-
-    archiveClassifier = 'sources'
-    from sourceSets.main.allSource
-
+tasks.named('javadocJar') {
     archiveBaseName = "${exec_lib_name}"
-    archiveVersion = "${exec_lib_version}"
-
-    manifest {
-        attributes(
-            commonJarManifestMap
-        )
-    }
-
-    from( rootProject.projectDir ) {
-        include 'LICENSE/'
-    }
-}
-
-artifacts {
-    archives javadocJar, sourcesJar
+    archiveVersion  = project.version
+    manifest { attributes(commonJarManifestMap) }
+    from(rootProject.projectDir) { include 'LICENSE/' }
 }
 
 license {
@@ -186,20 +156,14 @@ cyclonedxBom {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'com.kineticfire'
             artifactId = "${exec_lib_name}"
-            version = "${exec_lib_version}"
-            
+
             from components.java
-            
-            artifact javadocJar
-            artifact sourcesJar
-            
+
             pom {
                 name = "${exec_lib_title}"
                 description = 'A Java library for simplifying native system process execution and shell script validation'
                 url = 'https://github.com/kineticfire-labs/exec'
-                
                 licenses {
                     license {
                         name = 'Apache License, Version 2.0'
@@ -207,7 +171,6 @@ publishing {
                         distribution = 'repo'
                     }
                 }
-                
                 developers {
                     developer {
                         id = 'kineticfire-labs'
@@ -217,55 +180,44 @@ publishing {
                         organizationUrl = 'https://labs.kineticfire.com/'
                     }
                 }
-                
                 scm {
-                    connection = 'scm:git:ssh://git@github.com:kineticfire-labs/exec.git'
-                    developerConnection = 'scm:git:ssh://git@github.com:kineticfire-labs/exec.git'
+                    // small nit: the ssh form should be either ssh URL or colon form, e.g.:
+                    connection = 'scm:git:ssh://git@github.com/kineticfire-labs/exec.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/kineticfire-labs/exec.git'
                     url = 'https://github.com/kineticfire-labs/exec'
                 }
-                
                 issueManagement {
                     system = 'GitHub Issues'
                     url = 'https://github.com/kineticfire-labs/exec/issues'
                 }
             }
         }
-        from components.java
-        artifact javadocJar
-        artifact sourcesJar
     }
 
-    repositories {
-        // RELEASES via OSSRH Staging API compatibility bridge → Central
-        maven {
-            name = 'sonatypeStaging'
-            url = uri('https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/')
-            credentials {
-                username = findProperty('centralPortalUsername') ?: System.getenv('CENTRAL_PORTAL_USERNAME')
-                password = findProperty('centralPortalPassword') ?: System.getenv('CENTRAL_PORTAL_PASSWORD')
-            }
-        }
-
-        // optional: SNAPSHOTS
-        maven {
-            name = 'sonatypeSnapshots'
-            url = uri('https://central.sonatype.com/repository/maven-snapshots/')
-            credentials {
-                username = findProperty('centralPortalUsername') ?: System.getenv('CENTRAL_PORTAL_USERNAME')
-                password = findProperty('centralPortalPassword') ?: System.getenv('CENTRAL_PORTAL_PASSWORD')
-            }
-        }
-    }
+    //todo
+//    repositories {
+//        maven {
+//            name = 'sonatypeStaging'
+//            url = uri('https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/')
+//            credentials {
+//                username = findProperty('centralPortalUsername') ?: System.getenv('CENTRAL_PORTAL_USERNAME')
+//                password = findProperty('centralPortalPassword') ?: System.getenv('CENTRAL_PORTAL_PASSWORD')
+//            }
+//        }
+//        maven {
+//            name = 'sonatypeSnapshots'
+//            url = uri('https://central.sonatype.com/repository/maven-snapshots/')
+//            credentials {
+//                username = findProperty('centralPortalUsername') ?: System.getenv('CENTRAL_PORTAL_USERNAME')
+//                password = findProperty('centralPortalPassword') ?: System.getenv('CENTRAL_PORTAL_PASSWORD')
+//            }
+//        }
+//    }
 }
 
 signing {
-    def signingKey = findProperty('signingKey') ?: System.getenv('SIGNING_KEY')
-    def signingPassword = findProperty('signingPassword') ?: System.getenv('SIGNING_PASSWORD')
-    
-    if (signingKey && signingPassword) {
-        useInMemoryPgpKeys(signingKey, signingPassword)
-        sign publishing.publications.maven
-    }
+    useGpgCmd()
+    sign publishing.publications
 }
 
 // auto close & release after publish
@@ -274,14 +226,18 @@ nexusPublishing {
         sonatype {
             nexusUrl.set(uri('https://ossrh-staging-api.central.sonatype.com/service/local/'))
             snapshotRepositoryUrl.set(uri('https://central.sonatype.com/repository/maven-snapshots/'))
+            stagingProfileId = group
             username.set(providers.gradleProperty('centralPortalUsername'))
             password.set(providers.gradleProperty('centralPortalPassword'))
         }
     }
+    transitionCheckOptions {
+        maxRetries.set(60)
+        delayBetween.set(java.time.Duration.ofSeconds(5))
+    }
 }
 
 build.finalizedBy( 'cyclonedxBom' )
-
 
 /**
  * Checks that required properties' values adhere to the required format, throwing an error if not.  If not set, then
@@ -317,9 +273,5 @@ void checkRequiredVersionPropertyList( propertyList ) {
             ext[property]=value
             println "Property not defined, setting to default:  $property=$value"
         }
-
     }
-
 }
-
-

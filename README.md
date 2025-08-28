@@ -337,21 +337,19 @@ Publishes to `~/.m2/repository/` to verify:
    centralPortalPassword=your-sonatype-password
    
    # GPG Signing Configuration
-   signingKey=-----BEGIN PGP PRIVATE KEY BLOCK-----\n...\n-----END PGP PRIVATE KEY BLOCK-----
-   signingPassword=your-gpg-key-passphrase
+   # GPG                                                                                                                                                              
+   signing.gnupg.keyName=<private key long>
+   signing.gnupg.passphrase=<passphrase>
    ```
 
 2. **Publish to Central Portal:**
-   ```bash
-   ./gradlew -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 publishAllPublicationsToCentralPortalRepository
-   ```
 
-##### Release (push → close → release → visible in Portal)
-`./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0`
+Stage:
+`./gradlew publishToSonatype closeSonatypeStagingRepository -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 --no-configuration-cache --info`
 
-##### Snapshots
-`./gradlew publishAllPublicationsToSonatypeSnapshotsRepository`
+Then check Central Portal.  Click the "Publish" button to publish, else "Drop" to drop.
 
+Or combined: `./gradlew publishToSonatype closeSonatypeStagingRepository closeAndReleaseSonatypeStagingRepository -Pproject_release=1.0.0 -Pexec_lib_version=1.0.0 --no-configuration-cache --info`
 
 ### **Known Issues**
 
