@@ -295,6 +295,137 @@ public final class ScriptValidator {
               After installation, ensure 'shellcheck' is available in your system PATH.""";
    }
 
+   /**
+    * Validates the script using a native command line process to run an OS-specific validation utility and returns a
+    * ScriptValidationResult with type-safe access to the validation results.
+    * <p>
+    * This method provides the same functionality as the Map-based validateScript method but returns a
+    * ScriptValidationResult object for better type safety and IDE support.
+    * <p>
+    * The returned ScriptValidationResult provides methods:
+    * <ul>
+    *    <li>isValid() - returns true if the script validation was successful</li>
+    *    <li>getExitCode() - returns the integer exit code from the validation process</li>
+    *    <li>getValidationOutput() - returns the validation output as a string</li>
+    *    <li>getErrorOutput() - returns any error output as a string</li>
+    * </ul>
+    *
+    * @param script
+    *    the path as a Path to the script to validate
+    * @return ScriptValidationResult containing the validation results
+    * @throws IllegalArgumentException
+    *    if an illegal or inappropriate argument was passed to this method
+    * @throws IOException
+    *    if an I/O error occurs, including if the required 'shellcheck' utility is not available on the system
+    * @throws NullPointerException
+    *    if an element in task list is null
+    * @throws SecurityException
+    *    if a security manager exists and
+    *    <ul>
+    *       <li>when attemping to start the process, its checkExec method doesn't allow creation of the subprocess,
+    *       or</li>
+    *       <li>its checkPermission method doesn't allow access to the process environment</li>
+    *    </ul>
+    * @throws UnsupportedOperationException
+    *    <ul>
+    *       <li>if the operating system does not support the creation of processes</li>
+    *       <li>if the operating system is not supported by this method</li>
+    *    </ul>
+    */
+   public static ScriptValidationResult validateScriptWithResult( Path script )
+         throws IOException {
+      
+      Map<String,String> resultMap = validateScript( script );
+      return new ScriptValidationResult( resultMap );
+   }
+
+   /**
+    * Validates the script using a native command line process to run an OS-specific validation utility and returns a
+    * ScriptValidationResult with type-safe access to the validation results.
+    * <p>
+    * This method provides the same functionality as the Map-based validateScript method but returns a
+    * ScriptValidationResult object for better type safety and IDE support.
+    * <p>
+    * The returned ScriptValidationResult provides methods:
+    * <ul>
+    *    <li>isValid() - returns true if the script validation was successful</li>
+    *    <li>getExitCode() - returns the integer exit code from the validation process</li>
+    *    <li>getValidationOutput() - returns the validation output as a string</li>
+    *    <li>getErrorOutput() - returns any error output as a string</li>
+    * </ul>
+    *
+    * @param script
+    *    the path as a File to the script to validate
+    * @return ScriptValidationResult containing the validation results
+    * @throws IllegalArgumentException
+    *    if an illegal or inappropriate argument was passed to this method
+    * @throws IOException
+    *    if an I/O error occurs, including if the required 'shellcheck' utility is not available on the system
+    * @throws NullPointerException
+    *    if an element in task list is null
+    * @throws SecurityException
+    *    if a security manager exists and
+    *    <ul>
+    *       <li>when attemping to start the process, its checkExec method doesn't allow creation of the subprocess, or</li>
+    *       <li>its checkPermission method doesn't allow access to the process environment</li>
+    *    </ul>
+    * @throws UnsupportedOperationException
+    *    <ul>
+    *       <li>if the operating system does not support the creation of processes</li>
+    *       <li>if the operating system is not supported by this method</li>
+    *    </ul>
+    */
+   public static ScriptValidationResult validateScriptWithResult( File script )
+         throws IOException {
+      
+      Map<String,String> resultMap = validateScript( script );
+      return new ScriptValidationResult( resultMap );
+   }
+
+   /**
+    * Validates the script using a native command line process to run an OS-specific validation utility and returns a
+    * ScriptValidationResult with type-safe access to the validation results.
+    * <p>
+    * This method provides the same functionality as the Map-based validateScript method but returns a
+    * ScriptValidationResult object for better type safety and IDE support.
+    * <p>
+    * The returned ScriptValidationResult provides methods:
+    * <ul>
+    *    <li>isValid() - returns true if the script validation was successful</li>
+    *    <li>getExitCode() - returns the integer exit code from the validation process</li>
+    *    <li>getValidationOutput() - returns the validation output as a string</li>
+    *    <li>getErrorOutput() - returns any error output as a string</li>
+    * </ul>
+    *
+    * @param script
+    *    the path as a String to the script to validate
+    * @return ScriptValidationResult containing the validation results
+    * @throws IllegalArgumentException
+    *    if an illegal or inappropriate argument was passed to this method
+    * @throws IOException
+    *    if an I/O error occurs, including if the required 'shellcheck' utility is not available on the system
+    * @throws NullPointerException
+    *    if an element in task list is null
+    * @throws SecurityException
+    *    if a security manager exists and
+    *    <ul>
+    *       <li>when attemping to start the process, its checkExec method doesn't allow creation of the subprocess,
+    *       or</li>
+    *       <li>its checkPermission method doesn't allow access to the process environment</li>
+    *    </ul>
+    * @throws UnsupportedOperationException
+    *    <ul>
+    *       <li>if the operating system does not support the creation of processes</li>
+    *       <li>if the operating system is not supported by this method</li>
+    *    </ul>
+    */
+   public static ScriptValidationResult validateScriptWithResult( String script )
+         throws IOException, UnsupportedOperationException {
+      
+      Map<String,String> resultMap = validateScript( script );
+      return new ScriptValidationResult( resultMap );
+   }
+
 
    private ScriptValidator( ) {
       throw new UnsupportedOperationException( "Class instantiation not supported" );

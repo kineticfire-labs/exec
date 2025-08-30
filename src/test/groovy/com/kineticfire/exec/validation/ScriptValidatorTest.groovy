@@ -222,4 +222,145 @@ class ScriptValidatorTest extends Specification {
         resultMap.exitValue == '0'
     }
 
+    def "validateScriptWithResult(Path script) returns ScriptValidationResult for valid script"( ) {
+
+        given: "a valid bash script"
+        script <<
+            """#!/bin/env bash
+
+            if [ "\$1" == "sayhi" ]; then
+                echo "Hi"
+            elif [ "\$1" == "sayhello" ]; then
+                echo "Hello"
+            fi
+
+            exit 0
+        """.stripIndent( )
+
+        when: "validate the bash script using new API"
+        Path scriptPath = Path.of( script.getAbsolutePath( ) )
+        ScriptValidationResult result = ScriptValidator.validateScriptWithResult( scriptPath )
+
+        then: "isValid() should return true"
+        result.isValid( ) == true
+
+        and: "getExitCode() should return 0"
+        result.getExitCode( ) == 0
+
+        and: "getValidationOutput() should be empty"
+        result.getValidationOutput( ) == ''
+
+        and: "getErrorOutput() should be empty"
+        result.getErrorOutput( ) == ''
+
+        and: "toString() should contain valid=true, exitCode=0"
+        result.toString( ).contains( 'valid=true' )
+        result.toString( ).contains( 'exitCode=0' )
+    }
+
+    def "validateScriptWithResult(File script) returns ScriptValidationResult for valid script"( ) {
+
+        given: "a valid bash script"
+        script <<
+            """#!/bin/env bash
+            echo "test"
+            exit 0
+        """.stripIndent( )
+
+        when: "validate the bash script using new API with File"
+        ScriptValidationResult result = ScriptValidator.validateScriptWithResult( script )
+
+        then: "isValid() should return true"
+        result.isValid( ) == true
+
+        and: "getExitCode() should return 0"
+        result.getExitCode( ) == 0
+
+        and: "getValidationOutput() should be empty"
+        result.getValidationOutput( ) == ''
+
+        and: "getErrorOutput() should be empty"
+        result.getErrorOutput( ) == ''
+    }
+
+    def "validateScriptWithResult(String script) returns ScriptValidationResult for valid script"( ) {
+
+        given: "a valid bash script"
+        script <<
+            """#!/bin/env bash
+            echo "test"
+            exit 0
+        """.stripIndent( )
+
+        when: "validate the bash script using new API with String"
+        ScriptValidationResult result = ScriptValidator.validateScriptWithResult( script.getAbsolutePath( ) )
+
+        then: "isValid() should return true"
+        result.isValid( ) == true
+
+        and: "getExitCode() should return 0"
+        result.getExitCode( ) == 0
+
+        and: "getValidationOutput() should be empty"
+        result.getValidationOutput( ) == ''
+
+        and: "getErrorOutput() should be empty"
+        result.getErrorOutput( ) == ''
+    }
+
+    def "validateScriptWithResult(String script) returns ScriptValidationResult for invalid script"( ) {
+
+        given: "an invalid bash script"
+        script <<
+            """#!/bin/env bash
+
+            if [ "\$1" == "sayhi" ]; then
+                echo "Hi"
+            elif [ "\$1" == "sayhello" ]; then
+                echo "Hello"
+            # removed 'fi' here to introduce script error
+
+            exit 0
+        """.stripIndent( )
+
+        when: "validate the invalid bash script using new API"
+        ScriptValidationResult result = ScriptValidator.validateScriptWithResult( script.getAbsolutePath( ) )
+
+        then: "isValid() should return false"
+        result.isValid( ) == false
+
+        and: "getExitCode() should return 1"
+        result.getExitCode( ) == 1
+
+        and: "getValidationOutput() should contain error explanation"
+        result.getValidationOutput( ).contains( "Couldn't find 'fi' for this 'if'" )
+
+        and: "getErrorOutput() should be empty"
+        result.getErrorOutput( ) == ''
+
+        and: "toString() should contain valid=false, exitCode=1"
+        result.toString( ).contains( 'valid=false' )
+        result.toString( ).contains( 'exitCode=1' )
+    }
+
+    def "validateScriptWithResult consistent with validateScript Map API"( ) {
+
+        given: "a valid bash script"
+        script <<
+            """#!/bin/env bash
+            echo "test"
+            exit 0
+        """.stripIndent( )
+
+        when: "validate using both APIs"
+        Map<String,String> mapResult = ScriptValidator.validateScript( script.getAbsolutePath( ) )
+        ScriptValidationResult objResult = ScriptValidator.validateScriptWithResult( script.getAbsolutePath( ) )
+
+        then: "both APIs should return consistent results"
+        objResult.isValid( ) == ( mapResult.isValid == 'true' )
+        objResult.getExitCode( ) == Integer.parseInt( mapResult.exitValue )
+        objResult.getValidationOutput( ) == ( mapResult.out != null ? mapResult.out : '' )
+        objResult.getErrorOutput( ) == ( mapResult.err != null ? mapResult.err : '' )
+    }
+
 }
