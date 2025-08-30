@@ -27,11 +27,19 @@ import java.io.File;
 import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Locale;
 import java.io.IOException;
 
 
 /**
- * Provides system utilities.
+ * Provides script validation utilities using OS-specific validation tools.
+ * <p>
+ * This class validates shell scripts (bash/sh) using external tools like shellcheck on Unix-like systems.
+ * All validation operations spawn independent processes and do not maintain any shared state.
+ * <p>
+ * <strong>Thread Safety:</strong> This class is thread-safe. All public methods can be called concurrently
+ * from multiple threads without external synchronization. Each validation operation creates an independent
+ * process execution context with no shared mutable state between method calls.
  *
  */
 public final class ScriptValidator {
@@ -174,7 +182,7 @@ public final class ScriptValidator {
 
       Map<String,String> responseMap;
 
-      String os = System.getProperty( "os.name" ).toLowerCase( );
+      String os = System.getProperty( "os.name" ).toLowerCase( Locale.ROOT );
 
       if (os.contains("win")) {
          throw new UnsupportedOperationException( "Script validation not supported on Windows." );

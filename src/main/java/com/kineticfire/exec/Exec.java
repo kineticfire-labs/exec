@@ -37,6 +37,10 @@ import java.io.IOException;
  * The methods execute a task as a native command line process, passed as a List&lt;String&gt; argument to the method,
  * and then return the String output of that command.  The methods differ primarily in return type mechanisms, error
  * handling, and ability to redirect standard error.
+ * <p>
+ * <strong>Thread Safety:</strong> This class is thread-safe. All public methods can be called concurrently
+ * from multiple threads without external synchronization. Each process execution creates an independent
+ * system process with its own resources, and no state is shared between method calls.
  *
  */
 public final class Exec {
