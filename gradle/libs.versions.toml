@@ -20,6 +20,7 @@
 groovy = "4.0.28"
 spockCore = "2.4-M6-groovy-4.0"
 junit = "5.13.4"
+junit-launcher = "1.13.4"
 hierynomus = "0.16.1"
 cycloneDX = "2.3.1"
 
@@ -27,7 +28,7 @@ cycloneDX = "2.3.1"
 groovy = { module = "org.apache.groovy:groovy", version.ref = "groovy" }
 spock-core = { module = "org.spockframework:spock-core", version.ref = "spockCore" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-launcher" }
 
 [bundles]
 testing = ["groovy", "spock-core", "junit-jupiter-api"]
