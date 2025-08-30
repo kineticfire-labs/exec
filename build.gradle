@@ -39,11 +39,25 @@ plugins {
 // properties that define versions the MUST be set; set on command line with -Pproperty=value
 def requiredVersionPropertyList = ['exec_lib_version']
 
+// tasks that require the version property to be set
+def versionRequiredTasks = [
+    'build', 'assemble', 'jar', 'sourcesJar', 'javadocJar',
+    'publish', 'publishToMavenLocal', 'publishToSonatype',
+    'publishMavenPublicationToSonatypeRepository',
+    'publishMavenPublicationToMavenLocalRepository',
+    'sign', 'signMavenPublication',
+    'closeAndReleaseSonatypeStagingRepository', 'closeSonatypeStagingRepository',
+    'cyclonedxBom'
+]
+
 group = 'com.kineticfire'
 version = (findProperty('exec_lib_version') ?: '0.0.0-SNAPSHOT').toString()
 
 // throw exception, stopping build, if property doesn't satisfy version format
-checkRequiredVersionPropertyList( requiredVersionPropertyList )
+// only check when running tasks that actually need the version
+if (isVersionRequiredForRequestedTasks(versionRequiredTasks)) {
+    checkRequiredVersionPropertyList( requiredVersionPropertyList )
+}
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -78,7 +92,7 @@ def commonJarManifestMap = [
         'Implementation-Vendor'  : 'KineticFire Labs',
         'Implementation-Project' : "${project_title}",
         'Implementation-Title'   : "${exec_lib_title}",
-        'Implementation-Version' : "${exec_lib_version}",
+        'Implementation-Version' : "${version}",
         'Implementation-URL'     : 'https://github.com/kineticfire-labs/exec/'
     ]
 
@@ -134,7 +148,7 @@ cyclonedxBom {
 
     projectType = 'library'
 
-    outputName = "${exec_lib_name}-${exec_lib_version}-cyclonedx"
+    outputName = "${exec_lib_name}-${version}-cyclonedx"
 
     includeConfigs = ['implementation']
     skipConfigs = ['testImplementation', 'testRuntimeOnly', 'api']
@@ -215,6 +229,19 @@ nexusPublishing {
 }
 
 build.finalizedBy( 'cyclonedxBom' )
+
+/**
+ * Determines if the version property is required based on the requested tasks.
+ * 
+ * @param versionRequiredTasks List of task names that require the version property
+ * @return true if any of the requested tasks require the version property, false otherwise
+ */
+def isVersionRequiredForRequestedTasks(versionRequiredTasks) {
+    def requestedTasks = gradle.startParameter.taskNames
+    return versionRequiredTasks.any { requiredTask ->
+        requestedTasks.contains(requiredTask)
+    }
+}
 
 /**
  * Checks that required properties' values adhere to the required format, throwing an error if not.
