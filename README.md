@@ -41,7 +41,7 @@ to run commands and return results as strings, maps, or exceptions, plus utiliti
 
 ## Installation
 
-Add `exec` to your project using your preferred build system as below.  The `exec library is published at 
+Add `exec` to your project using your preferred build system as below.  The `exec` library is published at 
 [Maven Central Repository](https://central.sonatype.com/artifact/com.kineticfire/exec).
 
 ### **Gradle**
